@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzmc.dbmgr.mapper.ProtectObjectMapper">
+  <resultMap id="BaseResultMap" type="com.hzmc.dbmgr.bean.ProtectObject">
+    <id column="obj_id" jdbcType="INTEGER" property="objId" />
+    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="db_type" jdbcType="INTEGER" property="dbType" />
+    <result column="obj_name" jdbcType="VARCHAR" property="objName" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="port" jdbcType="INTEGER" property="port" />
+    <result column="instance_name" jdbcType="VARCHAR" property="instanceName" />
+    <result column="service_name" jdbcType="VARCHAR" property="serviceName" />
+    <result column="db_user" jdbcType="VARCHAR" property="dbUser" />
+    <result column="db_password" jdbcType="VARCHAR" property="dbPassword" />
+    <result column="run_mode" jdbcType="INTEGER" property="runMode" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="object_type" jdbcType="INTEGER" property="objectType" />
+    <result column="version" jdbcType="VARCHAR" property="version" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="udp_port" jdbcType="INTEGER" property="udpPort" />
+    <result column="is_udp" jdbcType="INTEGER" property="isUdp" />
+    <result column="udp_msg_head" jdbcType="VARCHAR" property="udpMsgHead" />
+    <result column="is_krbs" jdbcType="INTEGER" property="isKrbs" />
+    <result column="key_tab" jdbcType="VARCHAR" property="keyTab" />
+    <result column="krb_conf" jdbcType="VARCHAR" property="krbConf" />
+    <result column="key_tab_value" jdbcType="VARCHAR" property="keyTabValue" />
+    <result column="key_tab_server" jdbcType="VARCHAR" property="keyTabServer" />
+    <result column="verification_type" jdbcType="INTEGER" property="verificationType" />
+    <result column="verification_data" jdbcType="VARCHAR" property="verificationData" />
+    <result column="manage_port" jdbcType="INTEGER" property="managePort" />
+    <result column="tunnel_url" jdbcType="VARCHAR" property="tunnelUrl" />
+    <result column="zk_obj_id" jdbcType="INTEGER" property="zkObjId" />
+    <result column="proxy_domain_name" jdbcType="VARCHAR" property="proxyDomainName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    obj_id, group_id, parent_id, db_type, obj_name, ip, port, instance_name, service_name, 
+    db_user, db_password, run_mode, status, object_type,version, create_time, update_time,udp_port,is_udp
+    ,udp_msg_head,is_krbs,key_tab,krb_conf,key_tab_value,key_tab_server,verification_type,verification_data,manage_port,
+    tunnel_url,zk_obj_id,proxy_domain_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mc$asset_db_objects
+    where obj_id = #{objId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from mc$asset_db_objects
+    where obj_id = #{objId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hzmc.dbmgr.bean.ProtectObject">
+    <selectKey keyProperty="objId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mc$asset_db_objects (group_id, parent_id, db_type, 
+      obj_name, ip, port, 
+      instance_name, service_name, db_user, 
+      db_password, run_mode, status, 
+      object_type,version, create_time, update_time,
+      udp_port,is_udp,udp_msg_head,
+      is_krbs,key_tab,krb_conf,key_tab_value,key_tab_server,verification_type,verification_data,manage_port,tunnel_url,
+      zk_obj_id,proxy_domain_name
+      )
+    values (#{groupId,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{dbType,jdbcType=INTEGER}, 
+      #{objName,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{port,jdbcType=INTEGER}, 
+      #{instanceName,jdbcType=VARCHAR}, #{serviceName,jdbcType=VARCHAR}, #{dbUser,jdbcType=VARCHAR}, 
+      #{dbPassword,jdbcType=VARCHAR}, #{runMode,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{objectType,jdbcType=INTEGER},#{version,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+      #{udpPort,jdbcType=INTEGER},#{isUdp,jdbcType=INTEGER}, #{udpMsgHead,jdbcType=VARCHAR},
+      #{isKrbs,jdbcType=INTEGER},#{keyTab,jdbcType=VARCHAR}, #{krbConf,jdbcType=VARCHAR}, #{keyTabValue,jdbcType=VARCHAR},#{keyTabServer,jdbcType=VARCHAR},
+       #{verificationType,jdbcType=INTEGER}, #{verificationData,jdbcType=VARCHAR}, #{managePort,jdbcType=INTEGER},
+       #{tunnelUrl,jdbcType=VARCHAR},#{zkObjId,jdbcType=INTEGER},#{proxyDomainName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hzmc.dbmgr.bean.ProtectObject">
+    <selectKey keyProperty="objId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into mc$asset_db_objects
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="dbType != null">
+        db_type,
+      </if>
+      <if test="objName != null">
+        obj_name,
+      </if>
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="port != null">
+        port,
+      </if>
+      <if test="instanceName != null">
+        instance_name,
+      </if>
+      <if test="serviceName != null">
+        service_name,
+      </if>
+      <if test="dbUser != null">
+        db_user,
+      </if>
+      <if test="dbPassword != null">
+        db_password,
+      </if>
+      <if test="runMode != null">
+        run_mode,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="objectType != null">
+        object_type,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="udpPort != null">
+        udp_port,
+      </if>
+      <if test="isUdp != null">
+        is_udp,
+      </if>
+      <if test="udpMsgHead != null">
+        udp_msg_head,
+      </if>
+       <if test="keyTab != null">
+        key_tab,
+      </if>
+      <if test="isKrbs != null">
+        is_krbs,
+      </if>
+      <if test="krbConf != null">
+        krb_conf,
+      </if>
+       <if test="keyTabValue != null">
+        key_tab_value,
+      </if>
+       <if test="keyTabServer != null">
+        key_tab_server,
+      </if>
+      <if test="verificationType != null">
+        verification_type,
+      </if>
+      <if test="verificationData != null">
+        verification_data,
+      </if>
+      <if test="managePort != null">
+        manage_port,
+      </if>
+      <if test="tunnelUrl != null">
+        tunnel_url,
+      </if>
+      <if test="zkObjId != null">
+        zk_obj_id,
+      </if>
+      <if test="proxyDomainName != null">
+        proxy_domain_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="groupId != null">
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="dbType != null">
+        #{dbType,jdbcType=INTEGER},
+      </if>
+      <if test="objName != null">
+        #{objName,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        #{port,jdbcType=INTEGER},
+      </if>
+      <if test="instanceName != null">
+        #{instanceName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceName != null">
+        #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="dbUser != null">
+        #{dbUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dbPassword != null">
+        #{dbPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="runMode != null">
+        #{runMode,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="objectType != null">
+        #{objectType,jdbcType=INTEGER},
+      </if>
+      <if test="version != null">
+       #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="udpPort != null">
+        #{udpPort,jdbcType=INTEGER},
+      </if>
+      <if test="isUdp != null">
+        #{isUdp,jdbcType=INTEGER},
+      </if>
+      <if test="udpMsgHead != null">
+        #{udpMsgHead,jdbcType=VARCHAR},
+      </if>
+       <if test="keyTab != null">
+        #{keyTab,jdbcType=VARCHAR},
+      </if>
+      <if test="isKrbs != null">
+        #{isKrbs,jdbcType=INTEGER},
+      </if>
+      <if test="krbConf != null">
+        #{krbConf,jdbcType=VARCHAR},
+      </if>
+       <if test="keyTabValue != null">
+        #{keyTabValue,jdbcType=VARCHAR},
+      </if>
+      <if test="keyTabServer != null">
+        #{keyTabServer,jdbcType=VARCHAR},
+      </if>
+      <if test="verificationType != null">
+        #{verificationType,jdbcType=INTEGER},
+      </if>
+      <if test="verificationData != null">
+        #{verificationData,jdbcType=VARCHAR},
+      </if>
+      <if test="managePort != null">
+        #{managePort,jdbcType=INTEGER},
+      </if>
+      <if test="tunnelUrl != null">
+         #{tunnelUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="zkObjId != null">
+         #{zkObjId,jdbcType=INTEGER},
+      </if>
+      <if test="proxyDomainName != null">
+         #{proxyDomainName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertSelectiveWithObjId" parameterType="com.hzmc.dbmgr.bean.ProtectObject">
+    insert into mc$asset_db_objects
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="objId != null">
+        obj_id,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="dbType != null">
+        db_type,
+      </if>
+      <if test="objName != null">
+        obj_name,
+      </if>
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="port != null">
+        port,
+      </if>
+      <if test="instanceName != null">
+        instance_name,
+      </if>
+      <if test="serviceName != null">
+        service_name,
+      </if>
+      <if test="dbUser != null">
+        db_user,
+      </if>
+      <if test="dbPassword != null">
+        db_password,
+      </if>
+      <if test="runMode != null">
+        run_mode,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="objectType != null">
+        object_type,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="udpPort != null">
+        udp_port,
+      </if>
+      <if test="isUdp != null">
+        is_udp,
+      </if>
+      <if test="udpMsgHead != null">
+        udp_msg_head,
+      </if>
+      <if test="keyTab != null">
+        key_tab,
+      </if>
+      <if test="isKrbs != null">
+        is_krbs,
+      </if>
+      <if test="krbConf != null">
+        krb_conf,
+      </if>
+      <if test="keyTabValue != null">
+        key_tab_value,
+      </if>
+      <if test="keyTabServer != null">
+        key_tab_server,
+      </if>
+      <if test="verificationType != null">
+        verification_type,
+      </if>
+      <if test="verificationData != null">
+        verification_data,
+      </if>
+      <if test="managePort != null">
+        manage_port,
+      </if>
+      <if test="tunnelUrl != null">
+        tunnel_url,
+      </if>
+      <if test="zkObjId != null">
+         zk_obj_id,
+      </if>
+      <if test="proxyDomainName != null">
+         proxy_domain_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="objId != null">
+        #{objId,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="dbType != null">
+        #{dbType,jdbcType=INTEGER},
+      </if>
+      <if test="objName != null">
+        #{objName,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        #{port,jdbcType=INTEGER},
+      </if>
+      <if test="instanceName != null">
+        #{instanceName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceName != null">
+        #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="dbUser != null">
+        #{dbUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dbPassword != null">
+        #{dbPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="runMode != null">
+        #{runMode,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="objectType != null">
+        #{objectType,jdbcType=INTEGER},
+      </if>
+      <if test="version != null">
+       #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="udpPort != null">
+        #{udpPort,jdbcType=INTEGER},
+      </if>
+      <if test="isUdp != null">
+        #{isUdp,jdbcType=INTEGER},
+      </if>
+      <if test="udpMsgHead != null">
+        #{udpMsgHead,jdbcType=VARCHAR},
+      </if>
+      <if test="keyTab != null">
+        #{keyTab,jdbcType=VARCHAR},
+      </if>
+      <if test="isKrbs != null">
+        #{isKrbs,jdbcType=INTEGER},
+      </if>
+      <if test="krbConf != null">
+        #{krbConf,jdbcType=VARCHAR},
+      </if>
+      <if test="keyTabValue != null">
+        #{key_tab_value,jdbcType=VARCHAR},
+      </if>
+      <if test="keyTabServer != null">
+        #{key_tab_server,jdbcType=VARCHAR},
+      </if>
+      <if test="verificationType != null">
+        #{verificationType,jdbcType=INTEGER},
+      </if>
+      <if test="verificationData != null">
+        #{verificationData,jdbcType=VARCHAR},
+      </if>
+      <if test="managePort != null">
+        #{managePort,jdbcType=INTEGER},
+      </if>
+      <if test="tunnelUrl != null">
+         #{tunnelUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="zkObjId != null">
+         #{zkObjId,jdbcType=INTEGER},
+      </if>
+      <if test="proxyDomainName != null">
+         #{proxyDomainName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hzmc.dbmgr.bean.ProtectObject">
+    update mc$asset_db_objects
+    <set>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="dbType != null">
+        db_type = #{dbType,jdbcType=INTEGER},
+      </if>
+      <if test="objName != null">
+        obj_name = #{objName,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        port = #{port,jdbcType=INTEGER},
+      </if>
+      <if test="instanceName != null">
+        instance_name = #{instanceName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceName != null">
+        service_name = #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="dbUser != null">
+        db_user = #{dbUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dbPassword != null">
+        db_password = #{dbPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="runMode != null">
+        run_mode = #{runMode,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="objectType != null">
+        object_type = #{objectType,jdbcType=INTEGER},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="udpPort != null">
+        udp_port = #{udpPort,jdbcType=INTEGER},
+      </if>
+      <if test="isUdp != null">
+        is_udp = #{isUdp,jdbcType=INTEGER},
+      </if>
+      <if test="udpMsgHead != null">
+        udp_msg_head = #{udpMsgHead,jdbcType=VARCHAR},
+      </if>
+       <if test="keyTab != null">
+        key_tab = #{keyTab,jdbcType=VARCHAR},
+      </if>
+      <if test="isKrbs != null">
+        is_krbs = #{isKrbs,jdbcType=INTEGER},
+      </if>
+      <if test="krbConf != null">
+        krb_conf = #{krbConf,jdbcType=VARCHAR},
+      </if>
+       <if test="keyTabValue != null">
+        key_tab_value = #{keyTabValue,jdbcType=VARCHAR},
+      </if>
+       <if test="keyTabServer != null">
+        key_tab_server = #{keyTabServer,jdbcType=VARCHAR},
+      </if>
+      <if test="verificationType != null">
+        verification_type = #{verificationType,jdbcType=INTEGER},
+      </if>
+      <if test="verificationData != null">
+        verification_data = #{verificationData,jdbcType=VARCHAR},
+      </if>
+      <if test="managePort != null">
+        manage_port = #{managePort,jdbcType=INTEGER},
+      </if>
+      <if test="tunnelUrl != null">
+       tunnel_url=  #{tunnelUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="zkObjId != null">
+       zk_obj_id = #{zkObjId,jdbcType=INTEGER},
+      </if>
+      <if test="proxyDomainName != null">
+      proxy_domain_name = #{proxyDomainName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where obj_id = #{objId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hzmc.dbmgr.bean.ProtectObject">
+    update mc$asset_db_objects
+    set group_id = #{groupId,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      db_type = #{dbType,jdbcType=INTEGER},
+      obj_name = #{objName,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      port = #{port,jdbcType=INTEGER},
+      instance_name = #{instanceName,jdbcType=VARCHAR},
+      service_name = #{serviceName,jdbcType=VARCHAR},
+      db_user = #{dbUser,jdbcType=VARCHAR},
+      db_password = #{dbPassword,jdbcType=VARCHAR},
+      run_mode = #{runMode,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      object_type = #{objectType,jdbcType=INTEGER},
+      version = #{version,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      udp_port = #{udpPort,jdbcType=INTEGER},
+      is_udp = #{isUdp,jdbcType=INTEGER},
+      udp_msg_head = #{udpMsgHead,jdbcType=VARCHAR},
+      key_tab = #{keyTab,jdbcType=VARCHAR},
+      is_krbs = #{isKrbs,jdbcType=INTEGER},
+      krb_conf = #{krbConf,jdbcType=VARCHAR},
+      key_tab_value = #{keyTabValue,jdbcType=VARCHAR},
+      key_tab_server = #{keyTabServer,jdbcType=VARCHAR},
+      verification_type = #{verificationType,jdbcType=INTEGER},
+      verification_data = #{verificationData,jdbcType=VARCHAR},
+      manage_port = #{managePort,jdbcType=INTEGER},
+      tunnel_url=  #{tunnelUrl,jdbcType=VARCHAR},
+      zk_obj_id = #{zkObjId,jdbcType=INTEGER},
+      proxy_domain_name = #{proxyDomainName,jdbcType=VARCHAR}
+    where obj_id = #{objId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByGroupId" parameterType="java.lang.Integer">
+    update mc$asset_db_objects
+    set group_id = 0
+    where group_id = #{groupId,jdbcType=INTEGER}
+  </update>
+  <select id="getProtectObjectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from mc$asset_db_objects
+    where obj_name = #{objName,jdbcType=VARCHAR}
+  </select>
+  <select id="getAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mc$asset_db_objects
+  </select>
+  <select id="getByGroupId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mc$asset_db_objects
+    where group_id = #{groupId,jdbcType=INTEGER}
+  </select>
+  <select id="getByParentId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mc$asset_db_objects
+    where parent_id = #{parentId,jdbcType=INTEGER}
+  </select>
+  <select id="getProtectObjectListPaged" parameterType="Page" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mc$asset_db_objects
+    <where>
+      parent_id = 0
+      <if test="searchParameters.objName!=null">
+        and obj_name like "%"#{searchParameters.objName}"%"
+      </if>
+      <if test="searchParameters.dbType!=null">
+        and db_type = #{searchParameters.dbType}
+      </if>
+      <if test="searchParameters.status!=null">
+        and status = #{searchParameters.status}
+      </if>
+      <if test="searchParameters.groupId!=null">
+        and group_id = #{searchParameters.groupId}
+      </if>
+    </where>
+    <if test="orderField != null">
+      order by #{orderField}
+      <if test="ascend != true ">
+        desc
+      </if>
+    </if>
+    <if test="orderField == null">
+      order by create_time desc
+    </if>
+  </select>
+  <update id="updateStatusByGroupId">
+    update mc$asset_db_objects
+    set
+      status = #{status,jdbcType=INTEGER}
+    where group_id = #{groupId,jdbcType=INTEGER}
+  </update>
+  <select id="getProtectObjectListPublic" resultMap="BaseResultMap">
+    select * from mc$asset_db_objects
+    where <![CDATA[ parent_id = 0 ]]>
+  </select>
+  <select id="getAllDatabases" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mc$asset_db_objects
+    <where>
+      parent_id = 0
+      <if test="status != null">
+        and status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="objName!=null">
+        and obj_name like '%${objName}%'
+      </if>
+      <if test="objectType != null">
+        and object_type = #{objectType,jdbcType=INTEGER}
+      </if>
+      <if test="groupId != null">
+        and group_id = #{groupId,jdbcType=INTEGER}
+      </if>
+      <if test="ip!=null">
+        and ip like '%${ip}%'
+      </if>
+    </where>
+    order by create_time desc
+  </select>
+  <select id="selectByIPPortInstanceNameAndServiceName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mc$asset_db_objects
+    <where>
+      ip = #{ip,jdbcType=VARCHAR}
+      and port = #{port,jdbcType=INTEGER}
+      <if test="instanceName != null">
+        and (
+        instance_name = #{instanceName,jdbcType=VARCHAR}
+        or ((instance_name is null or trim(instance_name) = '') and (service_name is null or trim(service_name) = ''))
+        )
+      </if>
+      <if test="serviceName != null">
+        and (
+        service_name = #{serviceName,jdbcType=VARCHAR}
+        or ((service_name is null or trim(service_name) = '') and (instance_name is null or trim(instance_name) = ''))
+        )
+      </if>
+    </where>
+  </select>
+  <delete id="deleteByParentId" parameterType="java.lang.Integer">
+    delete
+    from mc$asset_db_objects
+    where parent_id = #{parentId,jdbcType=INTEGER}
+  </delete>
+  <select id="getByObjName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mc$asset_db_objects
+    where obj_name = #{objName,jdbcType=VARCHAR}
+  </select>
+  <update id="updateDbUserAndPassword" parameterType="com.hzmc.dbmgr.bean.ProtectObject">
+    update mc$asset_db_objects
+    <set>
+      <if test="dbUser != null">
+        db_user = #{dbUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dbPassword != null">
+        db_password = #{dbPassword,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where obj_id = #{objId,jdbcType=INTEGER}
+  </update>
+  <select id="getPortsByDbtype" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select port
+    from mc$asset_db_objects
+    where db_type = #{dbType,jdbcType=INTEGER}
+    group by port
+  </select>
+  <update id="updateStatus">
+    update mc$asset_db_objects
+    set status = #{status,jdbcType=INTEGER}
+    where obj_id = #{objId,jdbcType=INTEGER}
+    or parent_id = #{objId,jdbcType=INTEGER}
+  </update>
+  <update id="updateRunMode">
+    update mc$asset_db_objects
+    set run_mode = #{runMode,jdbcType=INTEGER}
+    where obj_id = #{objId,jdbcType=INTEGER}
+    or parent_id = #{objId,jdbcType=INTEGER}
+  </update>
+	<select id="getProjectByDbtype" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from mc$asset_db_objects
+		where (db_password !='' and db_user != '' and
+		db_type = #{dbType}) or (db_type = #{dbType} AND db_type = 15) or (db_type = #{dbType} and is_krbs=1)
+	</select>
+	<select id="getAllProjectByDbtype" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from mc$asset_db_objects
+		where db_type = #{dbType}
+	</select>
+</mapper>

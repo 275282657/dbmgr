@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzmc.dbmgr.mapper.AgentStatusMapper">
+	<resultMap id="BaseResultMap" type="com.hzmc.dbmgr.bean.AgentStatus">
+		<id column="obj_id" jdbcType="INTEGER" property="objId" />
+		<result column="obj_name" jdbcType="VARCHAR" property="objName" />
+		<result column="ip" jdbcType="VARCHAR" property="ip" />
+		<result column="port" jdbcType="INTEGER" property="port" />
+		<result column="db_type" jdbcType="INTEGER" property="dbType" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="service_name" jdbcType="VARCHAR" property="serviceName" />
+		<result column="db_user" jdbcType="VARCHAR" property="dbUser" />
+		<result column="db_password" jdbcType="VARCHAR" property="dbPassword" />
+		<result column="message" jdbcType="VARCHAR" property="message" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		obj_id,status,service_name,db_user,db_password,message
+	</sql>
+	
+	
+	<insert id="insertAgentStatus" parameterType="com.hzmc.dbmgr.bean.AgentStatus">
+		insert into mc$agent_status (obj_id, status,
+		service_name,db_user,db_password, message,create_time,update_time
+		)
+		values
+		(#{objId,jdbcType=INTEGER},
+		#{status,jdbcType=INTEGER},
+		#{serviceName,jdbcType=VARCHAR},
+		#{dbUser,jdbcType=VARCHAR},
+		#{dbPassword,jdbcType=VARCHAR},
+		#{message,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	
+	<delete id="deleteAgentStatus" parameterType="java.lang.Integer">
+	    delete from mc$agent_status
+        where obj_id = #{objId,jdbcType=INTEGER}
+	</delete>
+
+	<update id="updateAgentStatusByObjId" parameterType="com.hzmc.dbmgr.bean.AgentStatus">
+		update mc$agent_status
+		<set>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+				message = #{message,jdbcType=VARCHAR},
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<where>
+			obj_id = #{objId,jdbcType=INTEGER}
+		</where>
+	</update>
+	
+	
+	<update id="updateAllStatus">
+		update mc$agent_status
+		<set>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+	</update>
+
+	<select id="selectPage" parameterType="Page" resultMap="BaseResultMap">
+		select
+			aa.obj_id,aa.obj_name,aa.db_type,aa.ip,aa.port,IFNULL(bb.status,99) status,bb.message
+		from mc$asset_db_objects aa left join mc$agent_status bb
+			on
+		aa.obj_id=bb.obj_id
+		<where>
+		    (aa.db_type=1 or  aa.db_type=2 ) and aa.parent_id=0
+            <if test="searchParameters.objId != null">
+				and aa.obj_id = #{searchParameters.objId,jdbcType=INTEGER}
+			</if>
+		</where>
+	    <if test="orderField != null">
+			order by ${orderField}
+			<if test="ascend != true ">
+				desc
+			</if>
+		</if>
+		<if test="orderField == null">
+			order by aa.create_time desc
+		</if>
+		LIMIT ${limitNumber} , ${pageSize}
+	</select>
+	
+	<select id="selectPageCount" parameterType="Page" resultType="java.lang.Integer">
+		select
+			count(1)
+		from mc$asset_db_objects aa left join mc$agent_status bb
+			on
+		aa.obj_id=bb.obj_id
+		<where>
+		     (aa.db_type=1 or  aa.db_type=2) and aa.parent_id=0
+            <if test="searchParameters.objId != null">
+				and aa.obj_id = #{searchParameters.objId,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectByObjId" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+	    select
+   	 	<include refid="Base_Column_List" />
+    	from mc$agent_status
+    	where obj_id = #{objId,jdbcType=INTEGER}
+	</select>
+	
+	<select id="selectAllAgentStatus"  resultMap="BaseResultMap" >
+	    select
+   	 	  aa.*,bb.db_type,bb.ip,bb.port
+    	from mc$agent_status aa inner join  mc$asset_db_objects  bb 
+    	on aa.obj_id=bb.obj_id
+	</select>
+	
+	<select id="selectRunningAgentStatus"  resultMap="BaseResultMap" >
+	    select
+   	 	  aa.*,bb.db_type,bb.ip,bb.port
+    	from mc$agent_status aa inner join  mc$asset_db_objects  bb 
+    	on aa.obj_id=bb.obj_id
+    	where aa.status != 99
+	</select>
+</mapper>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzmc.dbmgr.mapper.AgentAppNameMapper">
+	<resultMap id="BaseResultMap" type="com.hzmc.dbmgr.bean.AgentAppName">
+		<result column="id" jdbcType="VARCHAR" property="id" />
+		<result column="obj_id" jdbcType="INTEGER" property="objId" />
+		<result column="app_name" jdbcType="VARCHAR" property="appName" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,obj_id,status,app_name,create_time,update_time,remark
+	</sql>
+
+	<insert id="insertAgentAppName" parameterType="com.hzmc.dbmgr.bean.AgentAppName">
+		insert into
+		mc$asset_app_name (id,obj_id, status,
+		app_name,create_time,update_time,remark
+		)
+		values
+		(
+		#{id,jdbcType=VARCHAR},
+		#{objId,jdbcType=INTEGER},
+		#{status,jdbcType=INTEGER},
+		#{appName,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	
+	<delete id="deleteAgentAppNameById" parameterType="java.lang.String">
+	    delete from mc$asset_app_name
+        where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	
+	<update id="updateAgentAppName" parameterType="com.hzmc.dbmgr.bean.AgentAppName">
+		update mc$asset_app_name
+		<set>
+			<if test="appName != null">
+				app_name = #{appName,jdbcType=VARCHAR},
+			</if>
+				status = #{status,jdbcType=INTEGER},
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<where>
+			id = #{id,jdbcType=VARCHAR}
+		</where>
+	</update>
+	
+	<select id="selectAgentAppNameByObjId" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+	    select
+   	 	<include refid="Base_Column_List" />
+    	from mc$asset_app_name
+    	where obj_id = #{objId,jdbcType=INTEGER} and status is null
+	</select>
+
+	<select id="selectAgentAppNameById" parameterType="java.lang.String" resultMap="BaseResultMap" >
+	    select
+   	 	<include refid="Base_Column_List" />
+    	from mc$asset_app_name
+    	where id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="pageAgentAppName" parameterType="Page" resultMap="BaseResultMap" >
+	    select
+   	 	<include refid="Base_Column_List" />
+    	from mc$asset_app_name
+    	<where>
+    	 obj_id = #{searchParameters.objId,jdbcType=INTEGER}
+    	 and status is  null
+    	 	<if test="searchParameters.appName != null">
+				and app_name like
+				"%"#{searchParameters.appName,jdbcType=VARCHAR}"%"
+			</if>
+    	</where>
+    	<if test="orderField != null">
+			order by ${orderField}
+			<if test="ascend != true ">
+				desc
+			</if>
+		</if>
+		<if test="orderField == null">
+			order by app_name 
+		</if>
+		<if test="paged == true">
+		limit #{limitNumber,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+	</select>
+	
+	<select id="pageAgentAppNameCount" parameterType="Page" resultType="java.lang.Integer" >
+	    select
+   	 	 count(1)
+    	from mc$asset_app_name
+    	<where>
+    	 obj_id = #{searchParameters.objId,jdbcType=INTEGER}
+    	 and status is  null
+    	 	<if test="searchParameters.appName != null">
+				and app_name like
+				"%"#{searchParameters.appName,jdbcType=VARCHAR}"%"
+			</if>
+    	</where>
+	</select>
+	
+	
+	<select id="selectAgentAppNameByName" parameterType="com.hzmc.dbmgr.bean.AgentAppName" resultType="java.lang.String" >
+	    select
+   	 	 id
+    	from mc$asset_app_name
+    	<where>
+    	 obj_id = #{objId,jdbcType=INTEGER}
+    	 and app_name = #{appName,jdbcType=VARCHAR}
+    	 and status is null
+    	</where>
+	</select>
+	
+	<select id="selectAppNameByObjId" parameterType="java.lang.Integer" resultType="java.lang.String" >
+	    select
+   	 	  app_name
+    	from mc$asset_app_name
+    	where obj_id = #{objId,jdbcType=INTEGER} and status is null
+	</select>
+	
+	
+</mapper>

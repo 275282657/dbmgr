@@ -1,0 +1,56 @@
+server:
+  port: 18810
+  context-path: /svc_db_mgr
+
+mybatis:
+  config-location: classpath:/mybatis/mybatis-config.xml
+  mapper-locations: classpath*:/mybatis/mapper/*.xml
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:13306/dbmgr?useUnicode=true&characterEncoding=utf-8
+    username: dbmgr
+    password: dbmgr321#
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      auto-commit: true
+      connection-test-query: select 1
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      pool-name: HikariCP
+  application:
+    name: svc-db-mgr
+
+web:
+  server: http://127.0.0.1:8080
+  outdatetime: 3600000
+
+eureka:
+  instance:
+    hostname: 127.0.0.1
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:eurekamchz@${eureka.instance.hostname}:8761/eureka/
+
+tempFileDir: /tmp
+hiveKerberos: /capaa/server/web/hiveKrb/
+
+SYS_PORT: ",22,80,443,9999,9998,9876,8888,8500,8320,13306,8080,8083,8983,8086,8085,8087,8088,8089,8761,9000,18005,18009,18080,18088,18379,18443,18161,18810,18820,18830,18999,19999,61615,7777,8125,8899,10010,18099,18840,18899,18890,15432"
+
+
+
+agentDb:
+  userName: hzmcdbagent
+  userName1: c##hzmcdbagent
+  passWord: Secc##hzmc1dbagent463
+  serviceName: master
+  fileUrl: /dbFiles/dbagent/
+  fileAllUrl: /capaa/server/web/dbFiles/dbagent/
+
+presto:
+  ssl: true
+  SSLKeyStorePath: /capaa/server/web/hiveKrb/www.capaa.com.cn.jks
+  SSLKeyStorePassword: 123456

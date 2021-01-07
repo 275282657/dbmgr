@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hzmc.dbmgr.mapper.LoginWhiteListMapper">
+	<resultMap id="BaseResultMap" type="com.hzmc.dbmgr.bean.LoginWhiteList">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="app_id" jdbcType="VARCHAR" property="appId" />
+		<result column="obj_id" jdbcType="INTEGER" property="objId" />
+		<result column="ip_mode" jdbcType="VARCHAR" property="ipMode" />
+		<result column="ip" jdbcType="VARCHAR" property="ip" />
+		<result column="app_name" jdbcType="VARCHAR" property="appName" />
+		<result column="ip_end" jdbcType="VARCHAR" property="ipEnd" />
+		<result column="poxy_logo" jdbcType="VARCHAR" property="poxyLogo" />
+		<result column="token_id" jdbcType="VARCHAR" property="tokenId" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	</resultMap>
+
+	
+    <sql id="Base_Column_List">
+		aa.id,aa.app_id,aa.ip_mode,aa.ip,aa.ip_end,aa.poxy_logo,aa.create_time,aa.update_time,aa.token_id,bb.app_name,bb.obj_id
+	</sql>
+
+	<insert id="insertLoginWhite" parameterType="com.hzmc.dbmgr.bean.LoginWhiteList">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into mc$login_whitelist (app_id,
+		ip_mode,ip,ip_end,
+		poxy_logo,create_time,update_time,token_id
+		)
+		values
+		(#{appId,jdbcType=VARCHAR},
+		#{ipMode,jdbcType=INTEGER},
+		#{ip,jdbcType=VARCHAR},
+		#{ipEnd,jdbcType=VARCHAR},
+		#{poxyLogo,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{tokenId,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="copyLoginWhite" parameterType="com.hzmc.dbmgr.bean.AgentAppName">
+		insert into mc$login_whitelist (app_id,
+		ip_mode,ip,ip_end,
+		create_time,update_time,token_id
+		)
+        select #{id,jdbcType=VARCHAR},ip_mode,ip,ip_end,SYSDATE(),SYSDATE(),token_id
+        from mc$login_whitelist
+        where app_id =  #{oldId,jdbcType=VARCHAR} and poxy_logo is null
+	</insert>
+
+	<delete id="deleteLoginWhiteById" parameterType="java.lang.Integer">
+		delete from
+		mc$login_whitelist
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<delete id="deleteLoginWhiteByAppNameId" parameterType="java.lang.String">
+		delete from
+		mc$login_whitelist
+		where app_id = #{appId,jdbcType=VARCHAR}
+		and poxy_logo is null
+	</delete>
+	
+    <delete id="deleteLoginWhiteByTokenId" parameterType="java.lang.String">
+		delete from
+		mc$login_whitelist
+		where token_id = #{tokenId,jdbcType=VARCHAR} and app_id = #{appId,jdbcType=VARCHAR}
+	</delete>
+
+	<update id="updateLoginWhite" parameterType="com.hzmc.dbmgr.bean.LoginWhiteList">
+		update mc$login_whitelist
+		<set>
+			<if test="ipMode != null">
+				ip_mode = #{ipMode,jdbcType=INTEGER},
+			</if>
+			<if test="ip != null">
+				ip = #{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="ipEnd != null">
+				ip_end = #{ipEnd,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<where>
+			id = #{id,jdbcType=INTEGER}
+		</where>
+	</update>
+	
+	
+	<select id="selecLoginWhitetById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		  <include refid="Base_Column_List"/>
+		from  mc$login_whitelist aa INNER JOIN mc$asset_app_name bb
+		 on aa.app_id=bb.id
+		<where>
+			aa.id = #{id,jdbcType=INTEGER}
+	    </where>
+	</select>
+
+
+	<select id="selectLoginWhiteByAppName" parameterType="Page"
+		resultMap="BaseResultMap">
+		select
+		 <include refid="Base_Column_List"/>
+		from mc$login_whitelist aa INNER JOIN mc$asset_app_name bb
+		on aa.app_id=bb.id
+		<where>
+			app_id = #{searchParameters.appId,jdbcType=VARCHAR}
+			and poxy_logo is null
+		</where>
+		<if test="orderField != null">
+			order by ${orderField}
+			<if test="ascend != true ">
+				desc
+			</if>
+		</if>
+		<if test="orderField == null">
+			order by ip_mode desc
+		</if>
+		LIMIT ${limitNumber} , ${pageSize}
+	</select>
+
+	<select id="selectLoginWhiteByAppNameCount" parameterType="Page"
+		resultType="java.lang.Integer">
+		select
+		count(1)
+		from mc$login_whitelist aa INNER JOIN mc$asset_app_name bb
+		on aa.app_id=bb.id
+		<where>
+			app_id = #{searchParameters.appId,jdbcType=VARCHAR}
+			and poxy_logo is null
+		</where>
+	</select>
+	
+	<select id="selectById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		  <include refid="Base_Column_List"/>
+		from  mc$login_whitelist aa INNER JOIN mc$asset_app_name bb
+		 on aa.app_id=bb.id
+		<where>
+			aa.id = #{id,jdbcType=INTEGER}
+		</where>
+	</select>
+	
+	
+	<select id="selectLoginWhiteByAppNameId" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		  <include refid="Base_Column_List"/>
+		from  mc$login_whitelist aa INNER JOIN mc$asset_app_name bb
+		 on aa.app_id=bb.id
+		<where>
+			app_id = #{appId,jdbcType=VARCHAR} 
+		</where>
+	</select>
+	
+    <select id="selectLoginWhiteByObjId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		  <include refid="Base_Column_List"/>
+		from  mc$login_whitelist aa INNER JOIN mc$asset_app_name bb
+		 on aa.app_id=bb.id
+		<where>
+			bb.obj_id = #{objId,jdbcType=INTEGER} 
+		</where>
+	</select>
+	
+	<select id="selectPoxyIpByObjId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		  <include refid="Base_Column_List"/>
+		from  mc$login_whitelist aa INNER JOIN mc$asset_app_name bb
+		 on aa.app_id=bb.id
+		<where>
+			obj_id = #{objId,jdbcType=INTEGER}  and poxy_logo is not null 
+			limit 1
+		</where>
+	</select>
+	
+	<select id="selectLoginWhiteByIp" parameterType="com.hzmc.dbmgr.bean.LoginWhiteList"
+		resultMap="BaseResultMap">
+		select
+		  <include refid="Base_Column_List"/>
+		from  mc$login_whitelist aa INNER JOIN mc$asset_app_name bb
+		 on aa.app_id=bb.id
+		<where>
+			app_id = #{appId,jdbcType=VARCHAR}
+			and aa.ip_mode = #{ipMode,jdbcType=INTEGER}
+		    and aa.ip = #{ip,jdbcType=VARCHAR}
+		    <if test="ipEnd != null ">
+				 and aa.ip_end = #{ipEnd,jdbcType=VARCHAR}
+			</if>
+		    and poxy_logo is  null 
+		</where>
+	</select>
+	
+	
+    <select id="selectLoginWhiteByTokenIdAndIp" parameterType="java.util.Map"
+		resultType="java.lang.String">
+		select
+		   a.ip
+		from  mc$login_whitelist a INNER JOIN mc$asset_app_name c  on a.app_id=c.id
+		<where>
+			a.ip  in(
+			select b.ip 
+			from mc$login_whitelist b 
+			where  a.id=b.id
+			and b.ip in
+		<foreach item="item" index="index" collection="list"
+			open="(" separator="," close=")">
+			#{item}
+		</foreach>
+			) and c.obj_id=#{objId}
+		</where>
+	</select>
+</mapper>
